@@ -1,34 +1,33 @@
-D=[] 
-mList=[]
+queue =[]
 pointer=0
-count=0
+count=[]
 N, M = map(int, input().split())
 L = list(map(int, input().strip().split()))
 for i in range(1, N+1):
-    D.append(i)
-for i in map(int, input().split()):
-    mList.append(j)
+    queue.append(i)
+pointer = M
 
-def dial(num,p):
-    right =0
-    left =0
-    while True:
-        if D[p%len(D)] == num:
-            left=len(D)-left
-            del D[p%len(D)]
+def solution(queue,pos,next,cnt):
+    tmp = queue[:]
+    # print(tmp)
+    if next == len(L):
+        count.append(cnt)
+        return
+    left = len(tmp) - 1
+    right = pos + 1
+    nextpos = 0
+    for i in range(len(tmp)):
+        if L[next] == tmp[i]:
+            nextpos = i
             break
-        else:
-            right+=1
-            p+=1
-    if right<left:
-        if len(D) == 0: return 0, right
-        return p,right
+    if abs(pos-nextpos) == 0:
+        del tmp[0]
+        solution(tmp,pos,next+1,cnt)
     else:
-        if len(D) == 0: return 0, left
-        return p, left
+        tmp = tmp[nextpos:]+tmp[:nextpos] 
+        test = [abs(left-nextpos), abs(right-nextpos)]
+        solution(tmp, 0, next, cnt+min(test)+1)
 
-for i in mList:
-    rPointer, rCount = dial(i,pointer)
-    pointer = rPointer
-    count +=rCount
-print(count)
+
+solution(queue,0,0,0)
+print(count[0])
